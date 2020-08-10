@@ -8,9 +8,6 @@
     "standard-with-typescript",
     "plugin:react/recommended"
   ],
-  "env": {
-    "cypress/globals": true
-  },
   "plugins": [
     "react"
   ],
@@ -24,6 +21,7 @@
     "@typescript-eslint/comma-spacing": "off",
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/camelcase": "off",
     "no-redeclare": "off",
     "import/export": "off",
     "react/jsx-uses-react": "error",
