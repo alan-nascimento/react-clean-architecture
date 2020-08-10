@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/alan-nascimento/react-clean-architecture/issues"
   },
-  "homepage": "https://github.com/alan-nascimento/react-clean-architecture#readme"
+  "homepage": "https://github.com/alan-nascimento/react-clean-architecture#readme",
+  "devDependencies": {
+    "git-commit-msg-linter": "^2.4.4"
+  }
 }
