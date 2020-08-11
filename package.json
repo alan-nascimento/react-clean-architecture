@@ -43,6 +43,7 @@
     "git-commit-msg-linter": "^2.4.4",
     "html-webpack-plugin": "^4.3.0",
     "husky": "^4.2.5",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^26.2.2",
     "lint-staged": "^10.2.11",
     "mini-css-extract-plugin": "^0.10.0",
