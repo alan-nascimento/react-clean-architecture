@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/alan-nascimento/react-clean-architecture#readme",
   "devDependencies": {
+    "@testing-library/react": "^10.4.8",
     "@types/axios": "^0.14.0",
     "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.9",
