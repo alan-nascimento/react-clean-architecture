@@ -5,15 +5,13 @@ import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/component
 
 import Styles from './login-styles.scss'
 
-type StateProps = {
-  isLoading: boolean
-  errorMessage: string
-}
-
 const Login: React.FC = () => {
-  const [state] = useState<StateProps>({
+  const [state] = useState({
     isLoading: false,
-    errorMessage: ''
+    errorMessage: '',
+    emailError: 'Required field',
+    passwordError: 'Required field',
+    mainError: ''
   })
 
   return (
