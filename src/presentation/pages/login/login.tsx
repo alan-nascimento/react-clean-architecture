@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { Validation } from '@/presentation/protocols'
 import { FormContext } from '@/presentation/contexts'
@@ -24,6 +24,8 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     mainError: ''
   })
 
+  const history = useHistory()
+
   useEffect(() => {
     setState({
       ...state,
@@ -43,6 +45,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
       const account = await authentication.auth({ email: state.email, password: state.password })
 
       localStorage.setItem('accessToken', account.accessToken)
+      history.replace('/')
     } catch (err) {
       setState({ ...state, isLoading: false, mainError: err.message })
     }
