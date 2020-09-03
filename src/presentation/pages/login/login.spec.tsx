@@ -7,10 +7,10 @@ import { createMemoryHistory } from 'history'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
 
 import { Authentication } from '@/domain/usecases'
+import { InvalidCredentialsError } from '@/domain/errors'
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
 
 import Login from './login'
-import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
