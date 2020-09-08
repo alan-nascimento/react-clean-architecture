@@ -4,7 +4,7 @@ import { render, RenderResult, fireEvent } from '@testing-library/react'
 
 import { FormContext } from '@/presentation/contexts'
 
-import Input from './Input'
+import Input from './input'
 
 const makeSut = (fieldName: string): RenderResult => {
   return render(
