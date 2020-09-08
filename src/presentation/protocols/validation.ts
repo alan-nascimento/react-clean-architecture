@@ -1,5 +1,5 @@
 export interface Validation {
-  errorMessage: string
+  [x: string]: any
 
   validate (fieldName: string, fieldValue: string): string
 }
