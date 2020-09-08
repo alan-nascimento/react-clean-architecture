@@ -21,13 +21,23 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LocalSaveAccessToken', () => {
-  it('should call SetStorage with correct value', async () => {
+  it('should call SetStorage with correct value', () => {
     const { sut, setStorageMock } = makeSut()
     const accessToken = faker.random.uuid()
 
-    await sut.save(accessToken)
+    sut.save(accessToken)
 
     expect(setStorageMock.key).toBe('accessToken')
     expect(setStorageMock.value).toBe(accessToken)
+  })
+
+  it('should throw if SetStorage throws', () => {
+    const { sut, setStorageMock } = makeSut()
+
+    jest.spyOn(setStorageMock, 'set').mockReturnValueOnce(undefined)
+
+    const promise = sut.save(faker.random.uuid())
+
+    expect(promise).toBe(undefined)
   })
 })
