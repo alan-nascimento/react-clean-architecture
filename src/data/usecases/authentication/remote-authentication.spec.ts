@@ -1,7 +1,7 @@
 import faker from 'faker'
 
 import { AccountModel } from '@/domain/models/account-model'
-import { HttpStatusCode } from '@/data/protocols/http'
+import { HttpStatusCode } from '@/data/protocols'
 import { HttpPostClientSpy } from '@/data/test'
 import { AuthenticationParams } from '@/domain/usecases/authentication'
 import { mockAuthentication, mockAccountModel } from '@/domain/test'

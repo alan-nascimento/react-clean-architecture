@@ -1,5 +1,5 @@
 import { AccountModel } from '@/domain/models/account-model'
-import { HttpStatusCode, HttpPostClient } from '@/data/protocols/http'
+import { HttpStatusCode, HttpPostClient } from '@/data/protocols'
 import { AuthenticationParams, Authentication } from '@/domain/usecases/authentication'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
