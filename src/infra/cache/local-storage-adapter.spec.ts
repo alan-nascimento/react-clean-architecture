@@ -4,13 +4,15 @@ import faker from 'faker'
 
 import { LocalStorageAdapter } from './local-storage-adapter'
 
+const makeSut = (): LocalStorageAdapter => new LocalStorageAdapter()
+
 describe('LocalStorageAdapter', () => {
   beforeAll(() => {
     localStorage.clear()
   })
 
   it('should call localStorage with correct values', () => {
-    const sut = new LocalStorageAdapter()
+    const sut = makeSut()
 
     const key = faker.database.column()
     const value = faker.random.word()
