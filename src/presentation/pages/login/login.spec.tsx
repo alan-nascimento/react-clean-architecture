@@ -56,12 +56,6 @@ const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.ema
   await waitFor(() => form)
 }
 
-const testElementText = (sut: RenderResult, testId: string, text: string): void => {
-  const element = sut.getByTestId(testId)
-
-  expect(element.textContent).toBe(text)
-}
-
 describe('Login Component', () => {
   afterEach(cleanup)
 
@@ -166,7 +160,7 @@ describe('Login Component', () => {
 
     await simulateValidSubmit(sut)
 
-    testElementText(sut, 'main-error', error.message)
+    Helper.testElementText(sut, 'main-error', error.message)
     Helper.testChildCount(sut, 'error-wrap', 1)
   })
 

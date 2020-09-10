@@ -5,6 +5,7 @@ import { render, RenderResult, cleanup, fireEvent, waitFor } from '@testing-libr
 import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
 
 import SignUp from './signup'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutParams = {
   validationError: string
@@ -162,7 +163,7 @@ describe('SignUp Component', () => {
     })
   })
 
-  it('should call Authentication only once', async () => {
+  it('should call AddAccount only once', async () => {
     const { sut, addAccountSpy } = makeSut()
 
     await simulateValidSubmit(sut)
@@ -171,7 +172,7 @@ describe('SignUp Component', () => {
     expect(addAccountSpy.callsCount).toBe(1)
   })
 
-  it('should not call Authentication form is invalid', async () => {
+  it('should not call AddAccount form is invalid', async () => {
     const validationError = faker.random.words()
 
     const { sut, addAccountSpy } = makeSut({ validationError })
@@ -179,5 +180,17 @@ describe('SignUp Component', () => {
     await simulateValidSubmit(sut)
 
     expect(addAccountSpy.callsCount).toBe(0)
+  })
+
+  it('should present error if AddAccount fails', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const error = new InvalidCredentialsError()
+
+    jest.spyOn(addAccountSpy, 'add').mockReturnValueOnce(Promise.reject(error))
+
+    await simulateValidSubmit(sut)
+
+    Helper.testElementText(sut, 'main-error', error.message)
+    Helper.testChildCount(sut, 'error-wrap', 1)
   })
 })
