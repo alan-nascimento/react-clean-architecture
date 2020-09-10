@@ -6,7 +6,7 @@ import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-libr
 
 import { InvalidCredentialsError } from '@/domain/errors'
 import { Authentication, SaveAccessToken } from '@/domain/usecases'
-import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock } from '@/presentation/test'
+import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, Helper } from '@/presentation/test'
 
 import Login from './login'
 
@@ -66,19 +66,6 @@ const simulateValidSubmit = async (sut: RenderResult, email = faker.internet.ema
   await waitFor(() => form)
 }
 
-const testStatusForField = (sut: RenderResult, fieldName: string, validationError?: string): void => {
-  const status = sut.getByTestId(`${fieldName}-status`)
-
-  expect(status.title).toBe(validationError || 'Ok')
-  expect(status.textContent).toBe(validationError ? '🔴' : '🟢')
-}
-
-const testErrorWrapChildCount = (sut: RenderResult, count: number): void => {
-  const errorWrap = sut.getByTestId('error-wrap')
-
-  expect(errorWrap.childElementCount).toBe(count)
-}
-
 const testElementExists = (sut: RenderResult, testId: string): void => {
   const element = sut.getByTestId(testId)
 
@@ -91,12 +78,6 @@ const testElementText = (sut: RenderResult, testId: string, text: string): void 
   expect(element.textContent).toBe(text)
 }
 
-const testButtonIsDisabled = (sut: RenderResult, testId: string, isDisabled: boolean): void => {
-  const button = sut.getByTestId(testId) as HTMLButtonElement
-
-  expect(button.disabled).toBe(isDisabled)
-}
-
 describe('Login Component', () => {
   afterEach(cleanup)
 
@@ -105,10 +86,10 @@ describe('Login Component', () => {
 
     const { sut } = makeSut({ validationError })
 
-    testStatusForField(sut, 'email', validationError)
-    testStatusForField(sut, 'password', validationError)
-    testButtonIsDisabled(sut, 'submit-button', true)
-    testErrorWrapChildCount(sut, 0)
+    Helper.testStatusForField(sut, 'email', validationError)
+    Helper.testStatusForField(sut, 'password', validationError)
+    Helper.testButtonIsDisabled(sut, 'submit-button', true)
+    Helper.testChildCount(sut, 'error-wrap', 0)
   })
 
   it('should show email error if validation fails', () => {
@@ -117,7 +98,7 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
 
     populateEmailField(sut)
-    testStatusForField(sut, 'email', validationError)
+    Helper.testStatusForField(sut, 'email', validationError)
   })
 
   it('should show password error if validation fails', () => {
@@ -126,21 +107,21 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
 
     populatePasswordField(sut)
-    testStatusForField(sut, 'password', validationError)
+    Helper.testStatusForField(sut, 'password', validationError)
   })
 
   it('should show valid email state if validation succeeds', () => {
     const { sut } = makeSut()
 
     populateEmailField(sut)
-    testStatusForField(sut, 'email')
+    Helper.testStatusForField(sut, 'email')
   })
 
   it('should show valid password state if validation succeeds', () => {
     const { sut } = makeSut()
 
     populatePasswordField(sut)
-    testStatusForField(sut, 'password')
+    Helper.testStatusForField(sut, 'password')
   })
 
   it('should enable submit button if form is valid', () => {
@@ -149,7 +130,7 @@ describe('Login Component', () => {
     populateEmailField(sut)
     populatePasswordField(sut)
 
-    testButtonIsDisabled(sut, 'submit-button', false)
+    Helper.testButtonIsDisabled(sut, 'submit-button', false)
   })
 
   it('should show spinner on submit', async () => {
@@ -202,7 +183,7 @@ describe('Login Component', () => {
     await simulateValidSubmit(sut)
 
     testElementText(sut, 'main-error', error.message)
-    testErrorWrapChildCount(sut, 1)
+    Helper.testChildCount(sut, 'error-wrap', 1)
   })
 
   it('should call SaveAccessToken on success', async () => {
