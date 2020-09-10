@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
+import { Validation } from '@/presentation/protocols'
 import { FormContext } from '@/presentation/contexts'
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
 
 import Styles from './signup-styles.scss'
 
-const SignUp: React.FC = () => {
+type Props = {
+  validation: Validation
+}
+
+const SignUp: React.FC<Props> = ({ validation }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
-    nameError: 'Required field',
+    name: '',
+    nameError: '',
     emailError: 'Required field',
     passwordError: 'Required field',
     passwordConfirmationError: 'Required field',
     mainError: ''
   })
+
+  useEffect(() => {
+    setState({
+      ...state,
+      nameError: validation.validate('name', state.name)
+    })
+  }, [state.name])
 
   return (
     <div className={Styles.signup}>
