@@ -1,11 +1,13 @@
 import React from 'react'
 import faker from 'faker'
+import { Router } from 'react-router-dom'
+import { createMemoryHistory } from 'history'
 import { render, RenderResult, cleanup, fireEvent, waitFor } from '@testing-library/react'
 
-import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
+import { InvalidCredentialsError } from '@/domain/errors'
+import { Helper, ValidationStub, AddAccountSpy, SaveAccessTokenMock } from '@/presentation/test'
 
 import SignUp from './signup'
-import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutParams = {
   validationError: string
@@ -14,24 +16,32 @@ type SutParams = {
 type SutTypes = {
   sut: RenderResult
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
+
+const history = createMemoryHistory({ initialEntries: ['/signup'] })
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const addAccountSpy = new AddAccountSpy()
+  const saveAccessTokenMock = new SaveAccessTokenMock()
 
   validationStub.errorMessage = params?.validationError
 
   const sut = render(
-    <SignUp
-      validation={validationStub}
-      addAccount={addAccountSpy}
-    />
+    <Router history={history}>
+      <SignUp
+        validation={validationStub}
+        addAccount={addAccountSpy}
+        saveAccessToken={saveAccessTokenMock}
+      />
+    </Router>
   )
 
   return {
     sut,
-    addAccountSpy
+    addAccountSpy,
+    saveAccessTokenMock
   }
 }
 
@@ -192,5 +202,25 @@ describe('SignUp Component', () => {
 
     Helper.testElementText(sut, 'main-error', error.message)
     Helper.testChildCount(sut, 'error-wrap', 1)
+  })
+
+  it('should call SaveAccessToken on success', async () => {
+    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut()
+
+    await simulateValidSubmit(sut)
+
+    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
+  })
+
+  it('should go to signup page', () => {
+    const { sut } = makeSut()
+
+    const signup = sut.getByTestId('signup')
+    fireEvent.click(signup)
+
+    expect(history.length).toBe(2)
+    expect(history.location.pathname).toBe('/signup')
   })
 })
