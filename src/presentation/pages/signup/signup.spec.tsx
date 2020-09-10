@@ -2,7 +2,7 @@ import React from 'react'
 import faker from 'faker'
 import { render, RenderResult, cleanup, fireEvent, waitFor } from '@testing-library/react'
 
-import { Helper, ValidationStub } from '@/presentation/test'
+import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
 
 import SignUp from './signup'
 
@@ -12,21 +12,25 @@ type SutParams = {
 
 type SutTypes = {
   sut: RenderResult
+  addAccountSpy: AddAccountSpy
 }
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
+  const addAccountSpy = new AddAccountSpy()
 
   validationStub.errorMessage = params?.validationError
 
   const sut = render(
     <SignUp
       validation={validationStub}
+      addAccount={addAccountSpy}
     />
   )
 
   return {
-    sut
+    sut,
+    addAccountSpy
   }
 }
 
@@ -139,5 +143,41 @@ describe('SignUp Component', () => {
     await simulateValidSubmit(sut)
 
     Helper.testElementExists(sut, 'spinner')
+  })
+
+  it('should call AddAccount with correct values', async () => {
+    const { sut, addAccountSpy } = makeSut()
+
+    const name = faker.name.findName()
+    const email = faker.internet.email()
+    const password = faker.internet.password()
+
+    await simulateValidSubmit(sut, name, email, password)
+
+    expect(addAccountSpy.params).toEqual({
+      name,
+      email,
+      password,
+      passwordConfirmation: password
+    })
+  })
+
+  it('should call Authentication only once', async () => {
+    const { sut, addAccountSpy } = makeSut()
+
+    await simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
+
+    expect(addAccountSpy.callsCount).toBe(1)
+  })
+
+  it('should not call Authentication form is invalid', async () => {
+    const validationError = faker.random.words()
+
+    const { sut, addAccountSpy } = makeSut({ validationError })
+
+    await simulateValidSubmit(sut)
+
+    expect(addAccountSpy.callsCount).toBe(0)
   })
 })
