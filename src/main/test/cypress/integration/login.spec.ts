@@ -5,6 +5,7 @@ const { baseUrl } = Cypress.config()
 describe('Login', () => {
   beforeEach(() => {
     cy.visit('login')
+    cy.server()
   })
 
   it('should load with correct initial state', () => {
@@ -57,32 +58,86 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  it('should present error if form invalid credentials are provided', () => {
+  it('should present InvalidCredentialsError on 401', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 401,
+      response: {
+        accessToken: faker.random.uuid()
+      }
+    })
+
     cy.getByTestId('email-input').focus().type(faker.internet.email())
     cy.getByTestId('password-input').focus().type(faker.random.alphaNumeric(5))
 
     cy.getByTestId('submit-button').click()
 
-    cy.getByTestId('error-wrap')
-      .getByTestId('spinner').should('exist')
-      .getByTestId('main-error').should('not.exist')
-      .getByTestId('spinner').should('not.exist')
-      .getByTestId('main-error').should('exist')
-      .getByTestId('main-error').should('contain.text', 'Invalid credentials')
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('contain.text', 'Invalid credentials')
 
     cy.url().should('eq', `${baseUrl}/login`)
   })
 
-  it('should save accessToken if credentials are provided', () => {
+  it('should present UnexpectedError on 400', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 400,
+      response: {
+        accessToken: faker.random.uuid()
+      }
+    })
+
+    cy.getByTestId('email-input').focus().type(faker.internet.email())
+    cy.getByTestId('password-input').focus().type(faker.random.alphaNumeric(5))
+
+    cy.getByTestId('submit-button').click()
+
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('contain.text', 'Something went wrong. Please try again later.')
+
+    cy.url().should('eq', `${baseUrl}/login`)
+  })
+
+  it('should present UnexpectedError if invalid data is returned', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 200,
+      response: {
+        invalidProperty: faker.random.uuid()
+      }
+    })
+
     cy.getByTestId('email-input').focus().type('mango@gmail.com')
     cy.getByTestId('password-input').focus().type('12345')
 
     cy.getByTestId('submit-button').click()
 
-    cy.getByTestId('error-wrap')
-      .getByTestId('spinner').should('exist')
-      .getByTestId('main-error').should('not.exist')
-      .getByTestId('spinner').should('not.exist')
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('contain.text', 'Something went wrong. Please try again later.')
+
+    cy.url().should('eq', `${baseUrl}/login`)
+  })
+
+  it('should save accessToken if credentials are provided', () => {
+    cy.route({
+      method: 'POST',
+      url: /login/,
+      status: 200,
+      response: {
+        accessToken: faker.random.uuid()
+      }
+    })
+
+    cy.getByTestId('email-input').focus().type(faker.internet.email())
+    cy.getByTestId('password-input').focus().type(faker.random.alphaNumeric(5))
+
+    cy.getByTestId('submit-button').click()
+
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('main-error').should('not.exist')
 
     cy.url().should('eq', `${baseUrl}/`)
     cy.window().then(window => assert.isOk(window.localStorage.getItem('accessToken')))
