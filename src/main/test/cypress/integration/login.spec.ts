@@ -4,21 +4,24 @@ const { baseUrl } = Cypress.config()
 
 describe('Login', () => {
   beforeEach(() => {
-    cy.visit('login')
     cy.server()
+    cy.visit('login')
   })
 
   it('should load with correct initial state', () => {
-    cy.getByTestId('email-input').should('have.attr', 'readOnly')
-    cy.getByTestId('password-input').should('have.attr', 'readOnly')
-
-    cy.getByTestId('email-status')
+    cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('email-input')
       .should('have.attr', 'title', 'Required field')
-      .should('contain.text', '🔴')
-
-    cy.getByTestId('password-status')
+      .should('have.attr', 'readOnly')
+    cy.getByTestId('email-label')
       .should('have.attr', 'title', 'Required field')
-      .should('contain.text', '🔴')
+
+    cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('password-input')
+      .should('have.attr', 'title', 'Required field')
+      .should('have.attr', 'readOnly')
+    cy.getByTestId('password-label')
+      .should('have.attr', 'title', 'Required field')
 
     cy.getByTestId('submit-button').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
@@ -26,16 +29,12 @@ describe('Login', () => {
 
   it('should present error if form is invalid', () => {
     cy.getByTestId('email-input').focus().type(faker.random.word())
-
-    cy.getByTestId('email-status')
-      .should('have.attr', 'title', 'Invalid field')
-      .should('contain.text', '🔴')
+    cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('email-label').should('have.attr', 'title', 'Invalid field')
 
     cy.getByTestId('password-input').focus().type(faker.random.alphaNumeric(4))
-
-    cy.getByTestId('password-status')
-      .should('have.attr', 'title', 'Invalid field')
-      .should('contain.text', '🔴')
+    cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'invalid')
+    cy.getByTestId('password-label').should('have.attr', 'title', 'Invalid field')
 
     cy.getByTestId('submit-button').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
@@ -43,16 +42,14 @@ describe('Login', () => {
 
   it('should present valid if form is valid', () => {
     cy.getByTestId('email-input').focus().type(faker.internet.email())
-
-    cy.getByTestId('email-status')
-      .should('have.attr', 'title', 'Ok')
-      .should('contain.text', '🟢')
+    cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'valid')
+    cy.getByTestId('email-label').should('not.have.attr', 'title')
+    cy.getByTestId('email-input').should('not.have.attr', 'title')
 
     cy.getByTestId('password-input').focus().type(faker.random.alphaNumeric(5))
-
-    cy.getByTestId('password-status')
-      .should('have.attr', 'title', 'Ok')
-      .should('contain.text', '🟢')
+    cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'valid')
+    cy.getByTestId('password-label').should('not.have.attr', 'title')
+    cy.getByTestId('password-input').should('not.have.attr', 'title')
 
     cy.getByTestId('submit-button').should('not.have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')

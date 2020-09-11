@@ -1,11 +1,14 @@
 import faker from 'faker'
 import { RenderResult, fireEvent } from '@testing-library/react'
 
-export const testStatusForField = (sut: RenderResult, testId: string, validationError?: string): void => {
-  const status = sut.getByTestId(`${testId}-status`)
+export const testStatusForField = (sut: RenderResult, testId: string, validationError = ''): void => {
+  const wrap = sut.getByTestId(`${testId}-wrap`)
+  const input = sut.getByTestId(`${testId}-input`)
+  const label = sut.getByTestId(`${testId}-label`)
 
-  expect(status.title).toBe(validationError || 'Ok')
-  expect(status.textContent).toBe(validationError ? '🔴' : '🟢')
+  expect(wrap.getAttribute('data-status')).toBe(validationError ? 'invalid' : 'valid')
+  expect(input.title).toBe(validationError)
+  expect(label.title).toBe(validationError)
 }
 
 export const testChildCount = (sut: RenderResult, testId: string, count: number): void => {
