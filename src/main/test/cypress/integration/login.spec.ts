@@ -72,4 +72,19 @@ describe('Login', () => {
 
     cy.url().should('eq', `${baseUrl}/login`)
   })
+
+  it('should save accessToken if credentials are provided', () => {
+    cy.getByTestId('email-input').focus().type('mango@gmail.com')
+    cy.getByTestId('password-input').focus().type('12345')
+
+    cy.getByTestId('submit-button').click()
+
+    cy.getByTestId('error-wrap')
+      .getByTestId('spinner').should('exist')
+      .getByTestId('main-error').should('not.exist')
+      .getByTestId('spinner').should('not.exist')
+
+    cy.url().should('eq', `${baseUrl}/`)
+    cy.window().then(window => assert.isOk(window.localStorage.getItem('accessToken')))
+  })
 })
