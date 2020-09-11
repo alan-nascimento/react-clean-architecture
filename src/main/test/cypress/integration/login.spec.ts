@@ -37,4 +37,21 @@ describe('Login', () => {
     cy.getByTestId('submit-button').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
+
+  it('should present valid if form is valid', () => {
+    cy.getByTestId('email-input').focus().type(faker.internet.email())
+
+    cy.getByTestId('email-status')
+      .should('have.attr', 'title', 'Ok')
+      .should('contain.text', '🟢')
+
+    cy.getByTestId('password-input').focus().type(faker.random.alphaNumeric(5))
+
+    cy.getByTestId('password-status')
+      .should('have.attr', 'title', 'Ok')
+      .should('contain.text', '🟢')
+
+    cy.getByTestId('submit-button').should('not.have.attr', 'disabled')
+    cy.getByTestId('error-wrap').should('not.have.descendants')
+  })
 })
