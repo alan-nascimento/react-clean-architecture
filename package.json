@@ -9,6 +9,7 @@
     "test:ci": "npm test -- --coverage",
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
+    "test:cypress": "cypress open",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "check": "npx npm-check -u -s"
   },
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/alan-nascimento/react-clean-architecture#readme",
   "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.4.5",
     "@testing-library/react": "^10.4.8",
     "@types/axios": "^0.14.0",
     "@types/faker": "^4.1.12",
@@ -36,8 +38,10 @@
     "clean-webpack-plugin": "^3.0.0",
     "coveralls": "^3.1.0",
     "css-loader": "^4.2.1",
+    "cypress": "^5.1.0",
     "eslint": "^7.6.0",
     "eslint-config-standard-with-typescript": "11",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
