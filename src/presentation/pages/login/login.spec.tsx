@@ -5,15 +5,14 @@ import { createMemoryHistory } from 'history'
 import { render, RenderResult, fireEvent, cleanup, waitFor } from '@testing-library/react'
 
 import { InvalidCredentialsError } from '@/domain/errors'
-import { Authentication, SaveAccessToken } from '@/domain/usecases'
 import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock, Helper } from '@/presentation/test'
 
 import Login from './login'
 
 type SutTypes = {
   sut: RenderResult
-  authenticationSpy: Authentication
-  saveAccessTokenMock: SaveAccessToken
+  authenticationSpy: AuthenticationSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
