@@ -80,4 +80,33 @@ describe('SignUp', () => {
     FormHelper.testMainError('This e-mail is already in use')
     FormHelper.testUrl('/signup')
   })
+
+  it('should present UnexpectedError on 400', () => {
+    Http.mockUnexpectedError()
+
+    simulateValidSubmit()
+
+    FormHelper.testMainError('Something went wrong. Please try again later.')
+    FormHelper.testUrl('/signup')
+  })
+
+  it('should present UnexpectedError if invalid data is returned from server', () => {
+    Http.mockInvalidData()
+
+    simulateValidSubmit()
+
+    FormHelper.testMainError('Something went wrong. Please try again later.')
+    FormHelper.testUrl('/signup')
+  })
+
+  it('should save accessToken if credentials are provided', () => {
+    Http.mockOk()
+
+    simulateValidSubmit()
+
+    cy.getByTestId('error-wrap').should('not.have.descendants')
+
+    FormHelper.testUrl('/')
+    FormHelper.testLocalStorageItem('accessToken')
+  })
 })
