@@ -1,0 +1,71 @@
+@import "../../../../styles/colors.scss";
+
+.surveyItemWrap {
+  height: 250px;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 8px;
+  flex-basis: 48%;
+  margin-bottom: 24px;
+  box-shadow: 0px 1px 3px -1px $black;
+
+  .surveyContent {
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px 8px 0px 0px;
+    justify-content: space-between;
+    flex-grow: 1;
+    background-repeat: no-repeat;
+    background-image:
+      linear-gradient(to right, rgba($primaryLight, 0.1), rgba($primaryLight, 0.1)),
+      linear-gradient(to right, $white, $white);
+    background-position: 0 0, 54 0;
+    background-size: 54px 100%, 100% 100%;
+    position: relative;
+
+    .iconWrap {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+    }
+
+    .calendarWrap {
+      margin-left: 24px;
+      align-self: center;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 24px;
+      align-self: center;
+      flex-grow: 1;
+    }
+  }
+
+  footer {
+    background-color: $primary;
+    cursor: pointer;
+    border-radius: 0px 0px 8px 8px;
+
+    a {
+      color: $white;
+      line-height: 40px;
+      text-transform: lowercase;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+    }
+
+    &:hover {
+      background-color: $primaryDark;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .surveyItemWrap {
+    flex-basis: 100%;
+  }
+}
