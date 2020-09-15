@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
 import { Validation } from '@/presentation/protocols'
-import { FormContext } from '@/presentation/contexts'
-import { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
+import { Authentication } from '@/domain/usecases'
+import { FormContext, ApiContext } from '@/presentation/contexts'
 import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 
 import Styles from './login-styles.scss'
@@ -11,10 +11,11 @@ import Styles from './login-styles.scss'
 type Props = {
   validation: Validation
   authentication: Authentication
-  updateCurrentAccount: UpdateCurrentAccount
 }
 
-const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccount }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+  const { setCurrentAccount } = useContext(ApiContext)
+
   const [state, setState] = useState({
     isLoading: false,
     errorMessage: '',
@@ -53,7 +54,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
 
       const account = await authentication.auth({ email: state.email, password: state.password })
 
-      updateCurrentAccount.save(account)
+      setCurrentAccount(account)
       history.replace('/')
     } catch (err) {
       setState({ ...state, isLoading: false, mainError: err.message })
