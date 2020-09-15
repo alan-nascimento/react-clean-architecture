@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom'
 
 import { Validation } from '@/presentation/protocols'
 import { FormContext } from '@/presentation/contexts'
-import { Authentication, SaveAccessToken } from '@/domain/usecases'
+import { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
 import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 
 import Styles from './login-styles.scss'
@@ -11,10 +11,10 @@ import Styles from './login-styles.scss'
 type Props = {
   validation: Validation
   authentication: Authentication
-  saveAccessToken: SaveAccessToken
+  updateCurrentAccount: UpdateCurrentAccount
 }
 
-const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccount }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     errorMessage: '',
@@ -51,9 +51,9 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
 
       setState({ ...state, isLoading: true })
 
-      const { accessToken } = await authentication.auth({ email: state.email, password: state.password })
+      const account = await authentication.auth({ email: state.email, password: state.password })
 
-      saveAccessToken.save(accessToken)
+      updateCurrentAccount.save(account)
       history.replace('/')
     } catch (err) {
       setState({ ...state, isLoading: false, mainError: err.message })
