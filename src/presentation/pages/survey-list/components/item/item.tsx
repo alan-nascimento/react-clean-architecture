@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { SurveyModel } from '@/domain/models'
 import { IconName, Icon, Calendar } from '@/presentation/components'
@@ -20,7 +21,7 @@ const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
         <p data-testid="question">{survey.question}</p>
       </div>
       <footer>
-        {/* <Link data-testid="link" to="/">Ver Resultado</Link> */}
+        <Link data-testid="link" to={`/surveys/${survey.id}`}>See Results</Link>
       </footer>
     </li>
   )

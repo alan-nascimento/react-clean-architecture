@@ -1,6 +1,6 @@
 import React from 'react'
 import { Router } from 'react-router-dom'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 
 import { IconName } from '@/presentation/components'
@@ -45,5 +45,15 @@ describe('SurveyItem Component', () => {
     expect(screen.getByTestId('day')).toHaveTextContent('03')
     expect(screen.getByTestId('month')).toHaveTextContent('mai')
     expect(screen.getByTestId('year')).toHaveTextContent('2019')
+  })
+
+  it('should go to SurveyResult', () => {
+    const survey = mockSurveyModel()
+
+    const { history } = makeSut(survey)
+
+    fireEvent.click(screen.getByTestId('link'))
+
+    expect(history.location.pathname).toBe(`/surveys/${survey.id}`)
   })
 })
