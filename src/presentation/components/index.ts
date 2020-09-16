@@ -1,4 +1,5 @@
 export { default as Calendar } from './calendar/calendar'
+export { default as Error } from './error/error'
 export { default as Footer } from './footer/footer'
 export { default as FormStatus } from './form-status/form-status'
 export { default as Header } from './header/header'

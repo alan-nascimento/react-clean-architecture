@@ -4,21 +4,22 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 
 import { ApiContext } from '@/presentation/contexts'
+import { LoadSurveyList } from '@/domain/usecases'
 import { AccountModel, SurveyModel } from '@/domain/models'
-import { mockAccountModel } from '@/domain/test'
+import { mockAccountModel, mockSurveyListModel } from '@/domain/test'
 
 import SurveyList from './survey-list'
-import { LoadSurveyList } from '@/domain/usecases'
 
 class LoadSurveyListSpy implements LoadSurveyList {
   callsCount = 0
+  surveys = mockSurveyListModel()
 
   async loadAll (): Promise<SurveyModel[]> {
     this.callsCount++
 
     await Promise.resolve(null)
 
-    return null
+    return this.surveys
   }
 }
 
@@ -60,9 +61,22 @@ describe('SurveyList Component', () => {
     await waitFor(() => surveyList)
   })
 
-  it('should call LoadSurveyList', () => {
+  it('should call LoadSurveyList', async () => {
     const { loadSurveyListSpy } = makeSut()
 
     expect(loadSurveyListSpy.callsCount).toBe(1)
+
+    await waitFor(() => screen.getByRole('heading'))
+  })
+
+  it('should render SurveyItems on success', async () => {
+    makeSut()
+
+    const surveyList = screen.getByTestId('survey-list')
+
+    await waitFor(() => surveyList)
+
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument()
+    expect(surveyList.querySelectorAll('li.surveyItemWrap')).toHaveLength(4)
   })
 })
