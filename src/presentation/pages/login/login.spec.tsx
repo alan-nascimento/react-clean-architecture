@@ -64,8 +64,8 @@ describe('Login Component', () => {
 
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
-    Helper.testButtonIsDisabled('submit-button', true)
-    Helper.testChildCount('error-wrap', 0)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
+    expect(screen.getByTestId('submit-button')).toBeDisabled()
   })
 
   it('should show email error if validation fails', () => {
@@ -106,7 +106,7 @@ describe('Login Component', () => {
     Helper.populateField('email')
     Helper.populateField('password')
 
-    Helper.testButtonIsDisabled('submit-button', false)
+    expect(screen.getByTestId('submit-button')).toBeEnabled()
   })
 
   it('should show spinner on submit', async () => {
@@ -114,7 +114,7 @@ describe('Login Component', () => {
 
     await simulateValidSubmit()
 
-    Helper.testElementExists('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   it('should call Authentication with correct values', async () => {
@@ -158,8 +158,8 @@ describe('Login Component', () => {
 
     await simulateValidSubmit()
 
-    Helper.testElementText('main-error', error.message)
-    Helper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
   })
 
   it('should call UpdateCurrentAccount on success', async () => {

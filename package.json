@@ -26,6 +26,7 @@
   "homepage": "https://github.com/alan-nascimento/react-clean-architecture#readme",
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.4.5",
+    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^10.4.8",
     "@types/axios": "^0.14.0",
     "@types/faker": "^4.1.12",
