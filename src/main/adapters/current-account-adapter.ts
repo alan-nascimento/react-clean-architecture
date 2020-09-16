@@ -3,7 +3,7 @@ import { UnexpectedError } from '@/domain/errors'
 import { makeLocalStorageAdapter } from '@/main/factories/cache/local-storage-adapter-factory'
 
 export const setCurrentAccountAdapter = (account: AccountModel): void => {
-  if (!account.accessToken) {
+  if (!account?.accessToken) {
     throw new UnexpectedError()
   }
 
