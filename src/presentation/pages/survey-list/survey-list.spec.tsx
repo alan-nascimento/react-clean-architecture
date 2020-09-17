@@ -79,7 +79,7 @@ describe('SurveyList Component', () => {
     expect(screen.queryByTestId('survey-list')).not.toBeInTheDocument()
   })
 
-  test('Should logout on AccessDeniedError', async () => {
+  it('should logout on AccessDeniedError', async () => {
     const loadSurveyListSpy = new LoadSurveyListSpy()
 
     jest.spyOn(loadSurveyListSpy, 'loadAll').mockRejectedValueOnce(new AccessDeniedError())
@@ -92,7 +92,7 @@ describe('SurveyList Component', () => {
     expect(history.location.pathname).toBe('/login')
   })
 
-  test('Should call LoadSurveyList on reload', async () => {
+  it('should call LoadSurveyList on reload', async () => {
     const loadSurveyListSpy = new LoadSurveyListSpy()
 
     jest.spyOn(loadSurveyListSpy, 'loadAll').mockRejectedValueOnce(new UnexpectedError())
