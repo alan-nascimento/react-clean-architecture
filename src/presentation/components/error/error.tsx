@@ -4,7 +4,7 @@ import Styles from './error-styles.scss'
 
 type Props = {
   error: string
-  reload: () => void
+  reload?: () => void
 }
 
 const Error: React.FC<Props> = ({ error, reload }: Props) => (

@@ -1,15 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { SurveyModel } from '@/domain/models'
+import { LoadSurveyList } from '@/domain/usecases'
 import { IconName, Icon, Calendar } from '@/presentation/components'
 
 import Styles from './item-styles.scss'
 
 type Props = {
-  survey: SurveyModel
+  survey: LoadSurveyList.Model
 }
-
 const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
   const iconName = survey.didAnswer ? IconName.thumbUp : IconName.thumbDown
 
