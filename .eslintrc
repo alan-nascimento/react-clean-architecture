@@ -12,10 +12,7 @@
   "env": {
     "cypress/globals": true
   },
-  "plugins": [
-    "react",
-    "cypress"
-  ],
+  "plugins": ["react", "cypress"],
   "parserOptions": {
     "project": "./tsconfig-eslint.json"
   },
@@ -24,6 +21,7 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/comma-spacing": "off",
+    "@typescript-eslint/require-await": "off",
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/camelcase": "off",
