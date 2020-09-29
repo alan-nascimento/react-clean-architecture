@@ -4,7 +4,7 @@ import { GetStorage } from '@/data/protocols'
 
 export class GetStorageSpy implements GetStorage {
   key: string
-  value = faker.random.objectElement()
+  value: any = faker.random.objectElement()
 
   get (key: string): any {
     this.key = key
