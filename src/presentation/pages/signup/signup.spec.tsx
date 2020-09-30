@@ -6,8 +6,9 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 import { ApiContext } from '@/presentation/contexts'
 import { AccountModel } from '@/domain/models'
+import { AddAccountSpy } from '@/domain/test'
 import { InvalidCredentialsError } from '@/domain/errors'
-import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
+import { Helper, ValidationStub } from '@/presentation/test'
 
 import SignUp from './signup'
 
