@@ -1,7 +1,7 @@
 {
   "name": "react-clean-architecture",
   "version": "3.0.0",
-  "description": "",
+  "description": "ReactJS Clean Architecture",
   "main": "index.js",
   "scripts": {
     "dev": "npm run dev:base -- --open",
@@ -24,7 +24,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/alan-nascimento/react-clean-architecture/issues"
   },
