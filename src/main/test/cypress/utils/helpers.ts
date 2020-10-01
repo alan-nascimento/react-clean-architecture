@@ -1,4 +1,4 @@
-const { baseUrl } = Cypress.config()
+const { baseUrl }: { baseUrl: string } = Cypress.config()
 
 export const testHttpCallsCount = (count: number): void => {
   cy.get('@request.all').should('have.length', count)
