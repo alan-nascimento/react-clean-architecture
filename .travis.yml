@@ -4,3 +4,8 @@ node_js:
 script:
   - eslint 'src/**'
   - npm run test:coveralls
+build:
+  provider: heroku
+  api_key: $HEROKU_API
+  app: react-clean-architecture
+  skip_cleanup: true
