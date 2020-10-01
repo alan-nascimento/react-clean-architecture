@@ -93,7 +93,7 @@ describe('Login', () => {
     populateFields()
 
     cy.getByTestId('submit-button').dblclick()
-
+    cy.wait('@request')
     Helper.testHttpCallsCount(1)
   })
 
