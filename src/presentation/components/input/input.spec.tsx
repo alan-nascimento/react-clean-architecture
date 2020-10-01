@@ -1,32 +1,28 @@
 import React from 'react'
 import faker from 'faker'
-import { render, RenderResult, fireEvent } from '@testing-library/react'
+import { render, fireEvent, screen } from '@testing-library/react'
 
-import { FormContext } from '@/presentation/contexts'
+import { InputBase } from '@/presentation/components'
 
-import Input from './input'
-
-const makeSut = (fieldName: string): RenderResult => {
-  return render(
-    <FormContext.Provider value={{ state: {} }}>
-      <Input name={fieldName} />
-    </FormContext.Provider>
+const makeSut = (fieldName: string): void => {
+  render(
+    <InputBase name={fieldName} state={{}} setState={null} />
   )
 }
 
 describe('Input Component', () => {
   it('should begin with readOnly', () => {
     const field = faker.database.column()
-    const sut = makeSut(field)
-    const input = sut.getByTestId(`${field}-input`) as HTMLInputElement
+    makeSut(field)
+    const input = screen.getByTestId(`${field}-input`) as HTMLInputElement
 
     expect(input.readOnly).toBe(true)
   })
 
   it('should remove readOnly on focus', () => {
     const field = faker.database.column()
-    const sut = makeSut(field)
-    const input = sut.getByTestId(`${field}-input`) as HTMLInputElement
+    makeSut(field)
+    const input = screen.getByTestId(`${field}-input`) as HTMLInputElement
 
     fireEvent.focus(input)
 
@@ -35,10 +31,10 @@ describe('Input Component', () => {
 
   it('should focus input on label click', () => {
     const field = faker.database.column()
-    const sut = makeSut(field)
+    makeSut(field)
 
-    const input = sut.getByTestId(`${field}-input`) as HTMLInputElement
-    const label = sut.getByTestId(`${field}-label`)
+    const input = screen.getByTestId(`${field}-input`) as HTMLInputElement
+    const label = screen.getByTestId(`${field}-label`)
 
     fireEvent.click(label)
 

@@ -1,13 +1,10 @@
-import React from 'react'
-import { Router } from 'react-router-dom'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { createMemoryHistory, MemoryHistory } from 'history'
 
-import { ApiContext } from '@/presentation/contexts'
+import { Header } from '@/presentation/components'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@/domain/test'
-
-import Header from './header'
+import { renderWithHistory } from '@/presentation/test'
 
 type SutTypes = {
   history: MemoryHistory
@@ -16,18 +13,7 @@ type SutTypes = {
 
 const makeSut = (account = mockAccountModel()): SutTypes => {
   const history = createMemoryHistory({ initialEntries: ['/'] })
-  const setCurrentAccountMock = jest.fn()
-
-  render(
-    <ApiContext.Provider value={{
-      setCurrentAccount: setCurrentAccountMock,
-      getCurrentAccount: () => account
-    }}>
-      <Router history={history}>
-        <Header />
-      </Router>
-    </ApiContext.Provider>
-  )
+  const { setCurrentAccountMock } = renderWithHistory({ history, Page: Header, account })
 
   return {
     history,

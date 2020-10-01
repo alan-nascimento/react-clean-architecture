@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
 import { Validation } from '@/presentation/protocols'
 import { Authentication } from '@/domain/usecases'
-import { FormContext, ApiContext } from '@/presentation/contexts'
-import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
+import { Footer, LoginHeader, currentAccountState } from '@/presentation/components'
+import { loginState, Input, SubmitButton, FormStatus } from '@/presentation/pages/login/components'
 
 import Styles from './login-styles.scss'
 
@@ -14,20 +15,15 @@ type Props = {
 }
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
-  const { setCurrentAccount } = useContext(ApiContext)
-
-  const [state, setState] = useState({
-    isLoading: false,
-    errorMessage: '',
-    email: '',
-    password: '',
-    emailError: '',
-    passwordError: '',
-    mainError: '',
-    isFormInvalid: false
-  })
+  const resetLoginState = useResetRecoilState(loginState)
+  const { setCurrentAccount } = useRecoilValue(currentAccountState)
 
   const history = useHistory()
+  const [state, setState] = useRecoilState(loginState)
+
+  useEffect(() => resetLoginState(), [])
+  useEffect(() => validate('email'), [state.email])
+  useEffect(() => validate('password'), [state.password])
 
   const validate = (field: string): void => {
     const { email, password } = state
@@ -37,45 +33,41 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     setState(old => ({ ...old, isFormInvalid: !!old.emailError || !!old.passwordError }))
   }
 
-  useEffect(() => { validate('email') }, [state.email])
-  useEffect(() => { validate('password') }, [state.password])
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
 
     try {
       if (state.isLoading || state.isFormInvalid) return
 
-      setState({ ...state, isLoading: true })
+      setState(old => ({ ...old, isLoading: true }))
 
-      const account = await authentication.auth({ email: state.email, password: state.password })
+      const account = await authentication.auth({
+        email: state.email,
+        password: state.password
+      })
 
       setCurrentAccount(account)
       history.replace('/')
-    } catch (err) {
-      setState({ ...state, isLoading: false, mainError: err.message })
+    } catch (error) {
+      setState(old => ({ ...old, isLoading: false,mainError: error.message }))
     }
   }
 
   return (
     <div className={Styles.loginWrap}>
       <LoginHeader />
+      <form data-testid="login-form" className={Styles.form} onSubmit={handleSubmit}>
+        <h2>Login</h2>
 
-      <FormContext.Provider value={{ state, setState }}>
-        <form data-testid="login-form" className={Styles.form} onSubmit={handleSubmit}>
-          <h2>Login</h2>
+        <Input type="email" name="email" placeholder="E-mail" />
+        <Input type="password" name="password" placeholder="Password" />
 
-          <Input type="email" name="email" placeholder="E-mail" />
-          <Input type="password" name="password" placeholder="Password" />
+        <SubmitButton text="SignIn" />
 
-          <SubmitButton text="SignIn" />
+        <Link to="/signup" data-testid="signup" className={Styles.link}>Create an account</Link>
 
-          <Link to="/signup" data-testid="signup" className={Styles.link}>Create an account</Link>
-
-          <FormStatus />
-        </form>
-      </FormContext.Provider>
-
+        <FormStatus />
+      </form>
       <Footer />
     </div>
   )

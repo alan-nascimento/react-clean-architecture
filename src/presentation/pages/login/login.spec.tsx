@@ -1,20 +1,18 @@
-import React from 'react'
 import faker from 'faker'
-import { Router } from 'react-router-dom'
-import { createMemoryHistory } from 'history'
-import { render, fireEvent, waitFor, screen } from '@testing-library/react'
 
-import { ApiContext } from '@/presentation/contexts'
-import { AccountModel } from '@/domain/models'
+import { createMemoryHistory } from 'history'
+import { fireEvent, waitFor, screen } from '@testing-library/react'
+
+import { Authentication } from '@/domain/usecases'
 import { AuthenticationSpy } from '@/domain/test'
-import { ValidationStub, Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
+import { ValidationStub, Helper, renderWithHistory } from '@/presentation/test'
 
 import Login from './login'
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy
-  setCurrentAccountMock: (account: AccountModel) => void
+  setCurrentAccountMock: (account: Authentication.Model) => void
 }
 
 type SutParams = {
@@ -24,22 +22,15 @@ type SutParams = {
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 
 const makeSut = (params?: SutParams): SutTypes => {
-  const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const setCurrentAccountMock = jest.fn()
+  const validationStub = new ValidationStub()
 
   validationStub.errorMessage = params?.validationError
 
-  render(
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-      <Router history={history}>
-        <Login
-          validation={validationStub}
-          authentication={authenticationSpy}
-        />
-      </Router>
-    </ApiContext.Provider>
-  )
+  const { setCurrentAccountMock } = renderWithHistory({
+    history,
+    Page: () => Login({ validation: validationStub, authentication: authenticationSpy })
+  })
 
   return {
     authenticationSpy,
