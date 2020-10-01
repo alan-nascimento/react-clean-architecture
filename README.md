@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/alan-nascimento/react-clean-architecture.svg?branch=master)](https://travis-ci.org/alan-nascimento/react-clean-architecture)
 [![Coverage Status](https://coveralls.io/repos/github/alan-nascimento/react-clean-architecture/badge.svg?branch=master)](https://coveralls.io/github/alan-nascimento/react-clean-architecture?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/alan-nascimento/react-clean-architecture/badge.svg)](https://snyk.io/test/github/alan-nascimento/react-clean-architecture)
-
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/)
 
 # **ReactJS Clean Architecture**
 
