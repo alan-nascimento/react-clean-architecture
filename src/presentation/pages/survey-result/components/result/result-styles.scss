@@ -1,0 +1,42 @@
+
+@import "../../../../styles/colors.scss";
+
+hgroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h2 {
+    color: $primaryDark;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .calendarWrap {
+    width: 80px;
+    margin-right: 16px;
+  }
+}
+
+.answersList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  margin-top: 24px;
+}
+
+@media only screen and (max-width: 600px) {
+  hgroup {
+    h2 {
+      font-size: 20px;
+    }
+
+    .calendarWrap {
+      width: 60px;
+    }
+  }
+}
